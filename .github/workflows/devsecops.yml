@@ -8,22 +8,18 @@ on:
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    container: node:14-bullseye
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 14
       - run: yarn install --frozen-lockfile
       - run: yarn rw test
 
   build-app:
     runs-on: ubuntu-latest
+    container: node:14-bullseye
     needs: [unit-tests]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 14
       - run: yarn install --frozen-lockfile
       - run: yarn rw build
 
