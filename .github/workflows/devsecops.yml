@@ -1,0 +1,35 @@
+name: DevOps Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 14
+      - run: yarn install --frozen-lockfile
+      - run: yarn rw test
+
+  build-app:
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 14
+      - run: yarn install --frozen-lockfile
+      - run: yarn rw build
+
+  deploy-qa:
+    runs-on: ubuntu-latest
+    needs: [build-app]
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Deployed to QA environment"
